@@ -16,7 +16,6 @@ class App extends Component {
   };
 
   loadMore = () => {
-    console.log('clik');
     this.setState(prevState => ({
       ...prevState,
       page: prevState.page + 1,
