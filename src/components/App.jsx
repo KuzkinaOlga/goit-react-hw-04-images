@@ -8,6 +8,8 @@ class App extends Component {
   state = {
     query: '',
     page: 1,
+    images: [],
+    status: '',
     isOpenModal: false,
     imageData: null,
   };
@@ -33,7 +35,7 @@ class App extends Component {
   };
 
   render() {
-    const { query, page, imageData } = this.state;
+    const { query, page, imageData, images, status } = this.state;
     const { onSubmit, loadMore, openModal, closeModal } = this;
     return (
       <>
@@ -44,6 +46,8 @@ class App extends Component {
           query={query}
           page={page}
           loadMore={loadMore}
+          images={images}
+          status={status}
         />
         {query.length === 0 && <h2>Sorry. There are no images ...</h2>}
         {query.length !== 0 && <Button onClick={loadMore} />}
