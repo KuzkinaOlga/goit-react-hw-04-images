@@ -5,7 +5,7 @@ import GalleryItem from './GalleryItem/GalleryItem';
 const Gallery = ({}) => {
     componentDidUpdate(prevProps, prevState) {
       const { query, page, images, status } = this.props
-      if (prevProps.query !== query || prevProps.page !== page || prevProps.images !== images || prevProps.status !== status) {
+      if (prevProps.query !== query || prevProps.page !== page) {
         this.setState({ status: 'pending' })
         fetch(
           `https://pixabay.com/api/?key=28799879-b9399141b8be01027c0bc8041&q=${query}&page=${page}&image_type=photo`
