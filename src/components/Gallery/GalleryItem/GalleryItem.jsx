@@ -2,8 +2,12 @@ import PropTypes from 'prop-types';
 
 const GalleryItem = ({ image, openModal }) => {
   return (
-    <li onClick={() => openModal(image)} className="imageGalleryItem-image">
-      <img src={image.webformatURL} alt={image.tags} />
+    <li className="imageGalleryItem-image">
+      <img
+        onClick={() => openModal(image)}
+        src={image.webformatURL}
+        alt={image.tags}
+      />
     </li>
   );
 };
