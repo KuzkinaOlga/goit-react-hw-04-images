@@ -81,7 +81,7 @@ const App = () => {
         status={status}
       />
       {isPending && <Loader color={'#3f51b5'} />}
-      {query.length === 0 && <h2>Sorry. There are no images ...</h2>}
+      {query.length === 0 && <h2>Sorry. There are no images ..</h2>}
       {query.length !== 0 && <Button onClick={loadMore} />}
       {isOpenModal && <Modal closeModal={closeModal} image={imageData} />}
     </>
