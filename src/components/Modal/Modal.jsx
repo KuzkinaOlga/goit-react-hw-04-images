@@ -1,32 +1,29 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', e => {
+const Modal = ({ closeModal, image }) => {
+  useEffect(() => {
+    const closeByEsc = e => {
       if (e.code === 'Escape') {
-        this.props.closeModal();
+        closeModal();
       }
-    });
-  }
+    };
+    window.addEventListener('keydown', closeByEsc);
+    return () => window.removeEventListener('keydown', closeByEsc);
+  }, [closeModal]);
 
-  hadleOnClick = () => {
-    this.props.closeModal();
+  const hadleOnClick = () => {
+    closeModal();
   };
 
-  render() {
-    return (
-      <div className="overlay" onClick={this.hadleOnClick}>
-        <div className="modal">
-          <img
-            src={this.props.image.largeImageURL}
-            alt={this.props.image.tags}
-          />
-        </div>
+  return (
+    <div className="overlay" onClick={hadleOnClick}>
+      <div className="modal">
+        <img src={image.largeImageURL} alt={image.tags} />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 Modal.propTypes = {
   closeModal: PropTypes.func.isRequired,
 };
