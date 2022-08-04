@@ -7,17 +7,15 @@ import imagesApi from 'service/imageService';
 import Loader from './Loader/Loader';
 
 const App = () => {
-  const [state, setState] = useState({
-    query: '',
-    page: 1,
-    images: [],
-    isPending: false,
-    isOpenModal: false,
-    imageData: null,
-  });
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [images, setImages] = useState([]);
+  const [isPending, setIsPending] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [imageData, setImageData] = useState(null);
+  const [perPage] = useState(12);
+  const [isVisible, setIsVisible] = useState(false);
 
-  const { query, page, imageData, images, status, isOpenModal, isPending } =
-    state;
   useEffect(() => {
     if (query === '') {
       return;
@@ -25,47 +23,33 @@ const App = () => {
     imagesApi
       .getImages(query, page)
       .then(data => {
-        setState(prevState => ({
-          ...prevState,
-          images: [...prevState.images, ...data.hits],
-        }));
+        setImages([...images, ...data.hits]);
+        setIsVisible(page < Math.ceil(data.total / perPage));
       })
       .catch(error => console.error(error))
       .finally(() => {
-        setState(prevState => ({ ...prevState, isPending: false }));
+        setIsPending(false);
       });
-  }, [query, page]);
+  }, [query, page, images, perPage]);
 
   const closeModal = () => {
-    setState(prevState => ({
-      ...prevState,
-      isOpenModal: false,
-      imageData: null,
-    }));
+    setIsOpenModal(false);
+    setImageData(null);
   };
   const openModal = image => {
-    setState(prevState => ({
-      ...prevState,
-      isOpenModal: true,
-      imageData: image,
-    }));
+    setIsOpenModal(true);
+    setImageData(image);
   };
   const onSubmit = query => {
-    setState(prevState => ({
-      ...prevState,
-      isPending: true,
-      query,
-      images: [],
-      page: 1,
-    }));
+    setIsPending(true);
+    setQuery(query);
+    setImages([]);
+    setPage(1);
   };
 
   const loadMore = () => {
-    setState(prevState => ({
-      ...prevState,
-      page: prevState.page + 1,
-      isPending: true,
-    }));
+    setPage(page => page + 1);
+    setIsPending(true);
   };
 
   return (
@@ -78,11 +62,10 @@ const App = () => {
         page={page}
         loadMore={loadMore}
         images={images}
-        status={status}
       />
       {isPending && <Loader color={'#3f51b5'} />}
-      {query.length === 0 && <h2>Sorry. There are no images ..</h2>}
-      {query.length !== 0 && <Button onClick={loadMore} />}
+      {images.length === 0 && <h2>Sorry. There are no images ..</h2>}
+      {isVisible && <Button onClick={loadMore} />}
       {isOpenModal && <Modal closeModal={closeModal} image={imageData} />}
     </>
   );
